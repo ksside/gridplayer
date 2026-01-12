@@ -17,7 +17,6 @@ env:
 
 jobs:
   build_snap:
-    needs: build_python
     runs-on: ubuntu-latest
     env:
       POETRY_VIRTUALENVS_CREATE: false
