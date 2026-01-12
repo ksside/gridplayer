@@ -2,8 +2,7 @@ default:
     just --list
 
 build-requirements:
-    mkdir -p build
-    if [ ! -f build/requirements.txt ]; then poetry export --without-hashes -o build/requirements.txt; fi
+    if [ ! -f build/requirements.txt ]; then mkdir -p build && poetry export --without-hashes -o build/requirements.txt; fi
 
 build:
     poetry build
