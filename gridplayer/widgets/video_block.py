@@ -392,9 +392,23 @@ class VideoBlock(QWidget):
 
         self.close()
 
+        self._delete_file_with_retry(file_path)
+
+    def _delete_file_with_retry(self, file_path, retries=5, delay_ms=200):
         try:
             file_path.unlink()
             self._log.info(f"Deleted file: {file_path}")
+        except PermissionError:
+            if retries > 0:
+                self._log.debug(
+                    f"File locked, retrying in {delay_ms}ms ({retries} left): {file_path}"
+                )
+                QTimer.singleShot(
+                    delay_ms,
+                    lambda: self._delete_file_with_retry(file_path, retries - 1, delay_ms),
+                )
+            else:
+                self._log.warning(f"Failed to delete file (still locked): {file_path}")
         except OSError:
             self._log.warning(f"Failed to delete file: {file_path}")
 

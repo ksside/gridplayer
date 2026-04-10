@@ -38,7 +38,7 @@ class ProcessManager(CommandLoopThreaded, QObject):
 
         self._instances_killed = Condition()
 
-        self._limit = Settings().get("player/video_driver_players")
+        self._limit = self._get_optimal_player_limit()
         self._instance_class = instance_class
 
         # Prevent opening multiple resource trackers
@@ -144,6 +144,22 @@ class ProcessManager(CommandLoopThreaded, QObject):
     def set_log_level(self, log_level):
         for a in self.active_instances:
             a.request_set_log_level(log_level)
+
+    @staticmethod
+    def _get_optimal_player_limit():
+        user_limit = Settings().get("player/video_driver_players")
+
+        # If user has explicitly changed from default, respect their choice
+        if user_limit != 4:
+            return user_limit
+
+        # Auto-tune based on CPU cores: more cores = more videos per process
+        cpu_count = os.cpu_count() or 4
+        if cpu_count >= 16:
+            return 8
+        if cpu_count >= 8:
+            return 6
+        return 4
 
     def _get_available_instance(self, options):
         for instance in self.active_instances:
