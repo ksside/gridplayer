@@ -679,6 +679,13 @@ ACTIONS = MappingProxyType(
             "icon": "close",
             "func": ("active", "close"),
         },
+        "Delete File": {
+            "title": translate("Actions", "Delete File"),
+            "key": "Delete",
+            "icon": "close",
+            "func": ("active", "delete_file"),
+            "show_if": "is_active_local_file",
+        },
         # All Videos
         "Play / Pause [ALL]": {
             "title": translate("Actions", "Play / Pause"),

@@ -55,7 +55,7 @@ class ActiveBlockManager(ManagerBase):
         if self.is_no_active_block:
             return None
 
-        is_inactive_command = command in {"switch_stream_quality", "reload", "close"}
+        is_inactive_command = command in {"switch_stream_quality", "reload", "close", "delete_file"}
 
         if not is_inactive_command and not self.is_active_initialized():
             return None

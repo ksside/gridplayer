@@ -382,6 +382,22 @@ class VideoBlock(QWidget):
 
         super().close()
 
+    def delete_file(self):
+        if self.video_params is None or not self.video_params.is_local_file:
+            return
+
+        file_path = Path(self.video_params.uri)
+
+        self._log.debug(f"Deleting file: {file_path}")
+
+        self.close()
+
+        try:
+            file_path.unlink()
+            self._log.info(f"Deleted file: {file_path}")
+        except OSError:
+            self._log.warning(f"Failed to delete file: {file_path}")
+
     def closeEvent(self, event) -> None:
         self.cleanup()
         event.accept()

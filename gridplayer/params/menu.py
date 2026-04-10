@@ -178,6 +178,7 @@ SECTIONS = MappingProxyType(
             "Reload",
             "Auto Reload: %v",
             "Close",
+            "Delete File",
         ],
         "video_all": [
             (
